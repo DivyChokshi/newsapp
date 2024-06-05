@@ -1,0 +1,341 @@
+// populate_db code:
+import json
+from app import app, db, Device, Interface, Link, RoutingTableEntry
+from sqlalchemy.orm import Session
+
+# Load the JSON data
+with open('input_file.json') as f:
+    data = json.load(f)
+
+# Create all tables
+with app.app_context():
+    db.create_all()
+
+    # Create a new session
+    session = Session(db.engine)
+
+    # Populate devices
+    for device in data['devices']:
+        device_data = session.get(Device, device['deviceID'])
+        if not device_data:
+            new_device = Device(
+                deviceID=device['deviceID'],
+                hostname=device['hostname'],
+                ipAddress=device['ipAddress'],
+                deviceType=device['deviceType'],
+                vendor=device['vendor'],
+                model=device['model'],
+                osVersion=device['osVersion'],
+                location=device['location'],
+                status=device['status']
+            )
+            session.add(new_device)
+
+    # Populate interfaces
+    for interface in data['interfaces']:
+        interface_data = session.get(Interface, interface['interfaceID'])
+        if not interface_data:
+            new_interface = Interface(
+                interfaceID=interface['interfaceID'],
+                deviceID=interface['deviceID'],
+                interfaceName=interface['interfaceName'],
+                macAddress=interface['macAddress'],
+                ipAddress=interface['ipAddress'],
+                subnetMask=interface['subnetMask'],
+                status=interface['status']
+            )
+            session.add(new_interface)
+
+    # Populate links
+    for link in data['links']:
+        link_data = session.get(Link, link['linkID'])
+        if not link_data:
+            new_link = Link(
+                linkID=link['linkID'],
+                sourceInterfaceID=link['sourceInterfaceID'],
+                destinationInterfaceID=link['destinationInterfaceID'],
+                linkType=link['linkType'],
+                bandwidth=link['bandwidth'],
+                status=link['status']
+            )
+            session.add(new_link)
+
+    # Populate routing table entries
+    for entry in data.get('routingTableEntries', []):
+        entry_data = session.get(RoutingTableEntry, entry['entryID'])
+        if not entry_data:
+            new_entry = RoutingTableEntry(
+                entryID=entry['entryID'],
+                deviceID=entry['deviceID'],
+                destinationNetwork=entry['destinationNetwork'],
+                subnetMask=entry['subnetMask'],
+                nextHop=entry['nextHop'],
+                interfaceID=entry['interfaceID'],
+                metric=entry['metric'],
+                protocol=entry['protocol']
+            )
+            session.add(new_entry)
+
+    # Commit the changes to the database
+    session.commit()
+
+
+
+//app.py code
+
+# from flask import Flask,request,render_template,jsonify
+# from trace_path import trace_path
+# app=Flask(__name__)
+
+# @app.route('/')
+# def main_route():
+#     return render_template('index.html')
+
+# @app.route('/trace_path',methods=["POST"])
+# def trace_path_route():
+#     data=request.form
+#     source_ip=data.get('source')
+#     destination_ip=data.get('destination')
+#     if not source_ip or not destination_ip:
+#         return jsonify({"error":"source and destination ips are required"}),401
+    
+#     paths=trace_path(source_ip,destination_ip)
+
+#     return jsonify({'paths':paths})
+
+# if __name__=='main':
+#     app.run(debug=True)
+
+
+from flask import Flask, request, render_template, jsonify
+from trace_path import trace_path
+from flask_sqlalchemy import SQLAlchemy
+
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///network.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+class Device(db.Model):
+    deviceID = db.Column(db.String, primary_key=True)
+    hostname = db.Column(db.String, nullable=False)
+    ipAddress = db.Column(db.String, nullable=False)
+    deviceType = db.Column(db.String, nullable=False)
+    vendor = db.Column(db.String, nullable=False)
+    model = db.Column(db.String, nullable=False)
+    osVersion = db.Column(db.String, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
+
+class Interface(db.Model):
+    interfaceID = db.Column(db.String, primary_key=True)
+    deviceID = db.Column(db.String, db.ForeignKey('device.deviceID'), nullable=False)
+    interfaceName = db.Column(db.String, nullable=False)
+    macAddress = db.Column(db.String, nullable=False)
+    ipAddress = db.Column(db.String, nullable=False)
+    subnetMask = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
+
+class Link(db.Model):
+    linkID = db.Column(db.String, primary_key=True)
+    sourceInterfaceID = db.Column(db.String, db.ForeignKey('interface.interfaceID'), nullable=False)
+    destinationInterfaceID = db.Column(db.String, db.ForeignKey('interface.interfaceID'), nullable=False)
+    linkType = db.Column(db.String, nullable=False)
+    bandwidth = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String, nullable=False)
+
+class RoutingTableEntry(db.Model):
+    entryID = db.Column(db.String, primary_key=True)
+    deviceID = db.Column(db.String, db.ForeignKey('device.deviceID'), nullable=False)
+    destinationNetwork = db.Column(db.String, nullable=False)
+    subnetMask = db.Column(db.String, nullable=False)
+    nextHop = db.Column(db.String, nullable=False)
+    interfaceID = db.Column(db.String, db.ForeignKey('interface.interfaceID'), nullable=False)
+    metric = db.Column(db.Integer, nullable=False)
+    protocol = db.Column(db.String, nullable=False)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/trace_path', methods=['POST'])
+def trace_path_route():
+    data = request.form
+    source_ip = data.get('source')
+    destination_ip = data.get('destination')
+    input_file = 'input.json'  # Replace with the path to your input file
+    
+    if not source_ip or not destination_ip:
+        return jsonify({'error': 'Source and destination IPs are required'}), 400
+    
+    paths = trace_path(source_ip, destination_ip, input_file)
+    
+    return jsonify({'paths': paths})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+// graph plot code
+
+
+import networkx as nx
+import matplotlib.pyplot as plt
+from netgraph import Graph
+from app import app, db, Device, Interface, Link, RoutingTableEntry
+
+def build_graph():
+    G = nx.Graph()
+
+    with app.app_context():
+        # Fetch all data from the database
+        devices = Device.query.all()
+        interfaces = Interface.query.all()
+        links = Link.query.all()
+
+        # Create dictionaries to map device and interface IDs to their properties
+        device_id_to_hostname = {device.deviceID: device.hostname for device in devices}
+        interface_to_device = {interface.interfaceID: interface.deviceID for interface in interfaces}
+        interface_id_to_ip = {interface.interfaceID: interface.ipAddress for interface in interfaces}
+
+        # Add nodes (devices) to the graph
+        for device in devices:
+            G.add_node(device.hostname, **device.__dict__)
+
+        # Add edges (links) to the graph with interface IDs as edge labels
+        for link in links:
+            try:
+                source_interface_id = link.sourceInterfaceID
+                destination_interface_id = link.destinationInterfaceID
+
+                source_device_id = interface_to_device[source_interface_id]
+                destination_device_id = interface_to_device[destination_interface_id]
+
+                source_device_hostname = device_id_to_hostname[source_device_id]
+                destination_device_hostname = device_id_to_hostname[destination_device_id]
+
+                edge_label = f"{source_interface_id} -> {destination_interface_id}"
+                G.add_edge(source_device_hostname, destination_device_hostname, label=edge_label)
+            except KeyError as e:
+                print(f"Error: {e} not found. Check if all interfaces in links are correctly defined in the interfaces section.")
+
+    return G
+
+def display(G):
+    pos = nx.spring_layout(G)
+
+    fig = plt.figure(1, figsize=(20, 19), dpi=140)
+
+    nx.draw(G, pos, with_labels=True, font_weight='bold', node_color='red', node_size=1000, width=3, font_size=20)
+    edge_labels = nx.get_edge_attributes(G, 'label')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_weight='bold', font_size=11.5)
+
+    plt.show()
+
+def display_highlight(G, a, b, routing_table):
+    pos = nx.spring_layout(G)
+
+    fig = plt.figure(1, figsize=(25, 24), dpi=140)
+
+    nx.draw(G, pos, with_labels=True, font_weight='bold', node_size=1000, width=3, font_size=19)
+    edge_labels = nx.get_edge_attributes(G, 'label')
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_weight='bold', font_size=11.5)
+    plot_instance = Graph(G,
+                          node_layout=pos,
+                          node_size=1,
+                          node_edge_width=0.01,
+                          edge_width=0.1
+                          )
+
+    # Using routing table to find the shortest path
+    path = find_shortest_path(routing_table, a, b)
+    print('shortest_path:', path)
+
+    for node in path:
+        plot_instance.node_artists[node].radius = 2. * 1e-2
+        plot_instance.node_artists[node].set_color('blue')
+
+    for ii, node_1 in enumerate(path[:-1]):
+        node_2 = path[ii + 1]
+        if (node_1, node_2) in plot_instance.edges:
+            edge = (node_1, node_2)
+        else:  # the edge is specified in reverse node order
+            edge = (node_2, node_1)
+        plot_instance.edge_artists[edge].update_width(.55 * 1e-2)
+        plot_instance.edge_artists[edge].set_color('green')
+        plot_instance.edge_artists[edge].set_alpha(1)
+
+    plt.show()
+
+def find_shortest_path(routing_table, start, end):
+    # Ensure both start and end are in the routing table
+    if start not in routing_table or end not in routing_table:
+        raise ValueError(f"No route from {start} to {end} in the routing table.")
+    
+    path = [start]
+    current = start
+
+    while current != end:
+        if current not in routing_table or end not in routing_table[current]:
+            raise ValueError(f"No route from {start} to {end} in the routing table.")
+        current = routing_table[current][end]
+        path.append(current)
+
+    return path
+
+
+def main():
+    with app.app_context():
+        # Build the graph from the database data
+        G = build_graph()
+
+        # Display the full network topology
+        print('map')
+        display(G)
+
+        # List of nodes (device hostnames) in the graph
+        node_list = [device.hostname for device in db.session.query(Device).all()]
+        print('list of places in the map')
+        print('\n')
+        print(node_list)
+
+        # Input source and destination nodes for highlighting the shortest path
+        a = input('enter the from location: ')
+        b = input('enter the to location: ')
+
+        # Fetch the routing table from the database
+        routing_table_entries = db.session.query(RoutingTableEntry).all()
+        routing_table = {}
+
+        for entry in routing_table_entries:
+            device = db.session.query(Device).get(entry.deviceID)
+            next_hop = db.session.query(Device).get(entry.nextHop)
+            
+            if device is None:
+                print(f"Device with ID {entry.deviceID} not found.")
+                continue
+            if next_hop is None:
+                print(f"Next hop with ID {entry.nextHop} not found.")
+                continue
+            
+            device_hostname = device.hostname
+            if device_hostname not in routing_table:
+                routing_table[device_hostname] = {}
+
+            next_hop_hostname = next_hop.hostname
+            routing_table[device_hostname][entry.destinationNetwork] = next_hop_hostname
+
+        # Debugging print to check routing_table structure
+        print("Routing Table:")
+        for device, routes in routing_table.items():
+            print(f"{device}: {routes}")
+
+        display_highlight(G, a, b, routing_table)
+
+if __name__ == '__main__':
+    main()
+
+
