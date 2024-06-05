@@ -1,0 +1,68 @@
+
+
+# populate_db.py
+import json
+from app import db, Device, Interface, Link, RoutingTableEntry
+
+# Load the JSON data
+with open('input_file.json') as f:
+    data = json.load(f)
+
+# Create all tables
+db.create_all()
+
+# Populate devices
+for device in data['devices']:
+    new_device = Device(
+        deviceID=device['deviceID'],
+        hostname=device['hostname'],
+        ipAddress=device['ipAddress'],
+        deviceType=device['deviceType'],
+        vendor=device['vendor'],
+        model=device['model'],
+        osVersion=device['osVersion'],
+        location=device['location'],
+        status=device['status']
+    )
+    db.session.add(new_device)
+
+# Populate interfaces
+for interface in data['interfaces']:
+    new_interface = Interface(
+        interfaceID=interface['interfaceID'],
+        deviceID=interface['deviceID'],
+        interfaceName=interface['interfaceName'],
+        macAddress=interface['macAddress'],
+        ipAddress=interface['ipAddress'],
+        subnetMask=interface['subnetMask'],
+        status=interface['status']
+    )
+    db.session.add(new_interface)
+
+# Populate links
+for link in data['links']:
+    new_link = Link(
+        linkID=link['linkID'],
+        sourceInterfaceID=link['sourceInterfaceID'],
+        destinationInterfaceID=link['destinationInterfaceID'],
+        linkType=link['linkType'],
+        bandwidth=link['bandwidth'],
+        status=link['status']
+    )
+    db.session.add(new_link)
+
+# Populate routing table entries
+for entry in data['routingTableEntries']:
+    new_entry = RoutingTableEntry(
+        entryID=entry['entryID'],
+        deviceID=entry['deviceID'],
+        destinationNetwork=entry['destinationNetwork'],
+        subnetMask=entry['subnetMask'],
+        nextHop=entry['nextHop'],
+        interfaceID=entry['interfaceID'],
+        metric=entry['metric'],
+        protocol=entry['protocol']
+    )
+    db.session.add(new_entry)
+
+db.session.commit()
