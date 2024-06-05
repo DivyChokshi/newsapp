@@ -1,0 +1,55 @@
+
+# app.py
+from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///network.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+class Device(db.Model):
+    deviceID = db.Column(db.String, primary_key=True)
+    hostname = db.Column(db.String, nullable=False)
+    ipAddress = db.Column(db.String, nullable=False)
+    deviceType = db.Column(db.String, nullable=False)
+    vendor = db.Column(db.String, nullable=False)
+    model = db.Column(db.String, nullable=False)
+    osVersion = db.Column(db.String, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
+
+class Interface(db.Model):
+    interfaceID = db.Column(db.String, primary_key=True)
+    deviceID = db.Column(db.String, db.ForeignKey('device.deviceID'), nullable=False)
+    interfaceName = db.Column(db.String, nullable=False)
+    macAddress = db.Column(db.String, nullable=False)
+    ipAddress = db.Column(db.String, nullable=False)
+    subnetMask = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
+
+class Link(db.Model):
+    linkID = db.Column(db.String, primary_key=True)
+    sourceInterfaceID = db.Column(db.String, db.ForeignKey('interface.interfaceID'), nullable=False)
+    destinationInterfaceID = db.Column(db.String, db.ForeignKey('interface.interfaceID'), nullable=False)
+    linkType = db.Column(db.String, nullable=False)
+    bandwidth = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String, nullable=False)
+
+class RoutingTableEntry(db.Model):
+    entryID = db.Column(db.String, primary_key=True)
+    deviceID = db.Column(db.String, db.ForeignKey('device.deviceID'), nullable=False)
+    destinationNetwork = db.Column(db.String, nullable=False)
+    subnetMask = db.Column(db.String, nullable=False)
+    nextHop = db.Column(db.String, nullable=False)
+    interfaceID = db.Column(db.String, db.ForeignKey('interface.interfaceID'), nullable=False)
+    metric = db.Column(db.Integer, nullable=False)
+    protocol = db.Column(db.String, nullable=False)
+
+@app.route('/')
+def index():
+    return "Flask app is running!"
+
+if __name__ == '__main__':
+    app.run(debug=True)
