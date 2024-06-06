@@ -1,0 +1,339 @@
+[
+  {
+    "deviceID": "device1",
+    "hostname": "Router1",
+    "ipAddress": "192.168.1.1",
+    "deviceType": "Router",
+    "vendor": "Cisco",
+    "model": "ISR4451",
+    "osVersion": "15.7(3)M",
+    "location": "Data Center 1",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface1",
+        "interfaceName": "GigabitEthernet0/0",
+        "macAddress": "00:1A:2B:3C:4D:5E",
+        "ipAddress": "192.168.1.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      },
+      {
+        "interfaceID": "interface2",
+        "interfaceName": "GigabitEthernet0/1",
+        "macAddress": "00:1A:2B:3C:4D:5F",
+        "ipAddress": "192.168.1.3",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link1",
+        "sourceInterfaceID": "interface1",
+        "destinationInterfaceID": "interface3",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      },
+      {
+        "linkID": "link10",
+        "sourceInterfaceID": "interface10",
+        "destinationInterfaceID": "interface1",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device2",
+    "hostname": "Switch1",
+    "ipAddress": "192.168.2.1",
+    "deviceType": "Switch",
+    "vendor": "Cisco",
+    "model": "Catalyst 9300",
+    "osVersion": "16.12.4",
+    "location": "Data Center 2",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface3",
+        "interfaceName": "GigabitEthernet1/0/1",
+        "macAddress": "00:1A:2B:3C:4D:6A",
+        "ipAddress": "192.168.2.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link2",
+        "sourceInterfaceID": "interface2",
+        "destinationInterfaceID": "interface4",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      },
+      {
+        "linkID": "link3",
+        "sourceInterfaceID": "interface3",
+        "destinationInterfaceID": "interface5",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device3",
+    "hostname": "Firewall1",
+    "ipAddress": "192.168.3.1",
+    "deviceType": "Firewall",
+    "vendor": "Palo Alto",
+    "model": "PA-850",
+    "osVersion": "9.1.4",
+    "location": "Data Center 3",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface4",
+        "interfaceName": "Ethernet1/1",
+        "macAddress": "00:1A:2B:3C:4D:6B",
+        "ipAddress": "192.168.3.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link4",
+        "sourceInterfaceID": "interface4",
+        "destinationInterfaceID": "interface6",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device4",
+    "hostname": "Router2",
+    "ipAddress": "192.168.4.1",
+    "deviceType": "Router",
+    "vendor": "Juniper",
+    "model": "MX480",
+    "osVersion": "18.3R3-S2",
+    "location": "Branch 1",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface5",
+        "interfaceName": "xe-0/0/0",
+        "macAddress": "00:1A:2B:3C:4D:6C",
+        "ipAddress": "192.168.4.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link5",
+        "sourceInterfaceID": "interface5",
+        "destinationInterfaceID": "interface7",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device5",
+    "hostname": "Switch2",
+    "ipAddress": "192.168.5.1",
+    "deviceType": "Switch",
+    "vendor": "HP",
+    "model": "Aruba 5406R",
+    "osVersion": "KB.16.10.0003",
+    "location": "Branch 2",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface6",
+        "interfaceName": "GigabitEthernet2/0/1",
+        "macAddress": "00:1A:2B:3C:4D:6D",
+        "ipAddress": "192.168.5.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link6",
+        "sourceInterfaceID": "interface6",
+        "destinationInterfaceID": "interface8",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device6",
+    "hostname": "AP1",
+    "ipAddress": "192.168.6.1",
+    "deviceType": "Access Point",
+    "vendor": "Cisco",
+    "model": "Aironet 2802I",
+    "osVersion": "8.5.151.0",
+    "location": "Office 1",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface7",
+        "interfaceName": "GigabitEthernet3/0/1",
+        "macAddress": "00:1A:2B:3C:4D:6E",
+        "ipAddress": "192.168.6.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link7",
+        "sourceInterfaceID": "interface7",
+        "destinationInterfaceID": "interface9",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device7",
+    "hostname": "Router3",
+    "ipAddress": "192.168.7.1",
+    "deviceType": "Router",
+    "vendor": "Huawei",
+    "model": "AR2200",
+    "osVersion": "V200R008C00",
+    "location": "Branch 3",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface8",
+        "interfaceName": "GigabitEthernet4/0/1",
+        "macAddress": "00:1A:2B:3C:4D:6F",
+        "ipAddress": "192.168.7.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link8",
+        "sourceInterfaceID": "interface8",
+        "destinationInterfaceID": "interface10",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device8",
+    "hostname": "Switch3",
+    "ipAddress": "192.168.8.1",
+    "deviceType": "Switch",
+    "vendor": "Dell",
+    "model": "N1548",
+    "osVersion": "6.5.3.6",
+    "location": "Branch 4",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface9",
+        "interfaceName": "GigabitEthernet5/0/1",
+        "macAddress": "00:1A:2B:3C:4D:7A",
+        "ipAddress": "192.168.8.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link9",
+        "sourceInterfaceID": "interface9",
+        "destinationInterfaceID": "interface10",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device9",
+    "hostname": "Firewall2",
+    "ipAddress": "192.168.9.1",
+    "deviceType": "Firewall",
+    "vendor": "Fortinet",
+    "model": "FortiGate 600D",
+    "osVersion": "6.2.3",
+    "location": "Data Center 4",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface10",
+        "interfaceName": "Ethernet1/1",
+        "macAddress": "00:1A:2B:3C:4D:7B",
+        "ipAddress": "192.168.9.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link10",
+        "sourceInterfaceID": "interface10",
+        "destinationInterfaceID": "interface1",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  },
+  {
+    "deviceID": "device10",
+    "hostname": "AP2",
+    "ipAddress": "192.168.10.1",
+    "deviceType": "Access Point",
+    "vendor": "Ubiquiti",
+    "model": "UniFi AC Pro",
+    "osVersion": "4.0.80",
+    "location": "Office 2",
+    "status": "active",
+    "interfaces": [
+      {
+        "interfaceID": "interface11",
+        "interfaceName": "GigabitEthernet6/0/1",
+        "macAddress": "00:1A:2B:3C:4D:7C",
+        "ipAddress": "192.168.10.2",
+        "subnetMask": "255.255.255.0",
+        "status": "active"
+      }
+    ],
+    "links": [
+      {
+        "linkID": "link11",
+        "sourceInterfaceID": "interface11",
+        "destinationInterfaceID": "interface5",
+        "linkType": "Ethernet",
+        "bandwidth": 1000,
+        "status": "active"
+      }
+    ]
+  }
+]
+
+
+
