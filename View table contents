@@ -1,0 +1,19 @@
+
+
+from sqlalchemy.orm import sessionmaker
+from your_module import Base, engine, YourModel
+
+# Create a session
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Retrieve all rows from the table
+all_rows = session.query(YourModel).all()
+
+# Print table contents
+for row in all_rows:
+    print(f"Table: {YourModel.__tablename__}")
+    for column, value in row.__dict__.items():
+        if not column.startswith('_'):
+            print(f"{column}: {value}")
+    print("\n")
