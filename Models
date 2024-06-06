@@ -1,0 +1,37 @@
+
+
+from app import db
+
+class Device(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    deviceID = db.Column(db.String(50), unique=True, nullable=False)
+    hostname = db.Column(db.String(50), nullable=False)
+    ipAddress = db.Column(db.String(50), nullable=False)
+    deviceType = db.Column(db.String(50), nullable=False)
+    vendor = db.Column(db.String(50), nullable=False)
+    model = db.Column(db.String(50), nullable=False)
+    osVersion = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    interfaces = db.relationship('Interface', backref='device', lazy=True)
+    links = db.relationship('Link', backref='device', lazy=True)
+
+class Interface(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    interfaceID = db.Column(db.String(50), unique=True, nullable=False)
+    deviceID = db.Column(db.String(50), db.ForeignKey('device.deviceID'), nullable=False)
+    interfaceName = db.Column(db.String(50), nullable=False)
+    macAddress = db.Column(db.String(50), nullable=False)
+    ipAddress = db.Column(db.String(50), nullable=False)
+    subnetMask = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+
+class Link(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    linkID = db.Column(db.String(50), unique=True, nullable=False)
+    deviceID = db.Column(db.String(50), db.ForeignKey('device.deviceID'), nullable=False)
+    sourceInterfaceID = db.Column(db.String(50), db.ForeignKey('interface.interfaceID'), nullable=False)
+    destinationInterfaceID = db.Column(db.String(50), db.ForeignKey('interface.interfaceID'), nullable=False)
+    linkType = db.Column(db.String(50), nullable=False)
+    bandwidth = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(50), nullable=False)
