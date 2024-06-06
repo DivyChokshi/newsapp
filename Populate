@@ -1,0 +1,53 @@
+
+
+from app import app, db
+from models import Device, Interface, Link
+import json
+
+# Load input data
+with open('input_file.json') as f:
+    input_data = json.load(f)
+
+with app.app_context():
+    db.create_all()
+
+    for device_data in input_data:
+        device = Device(
+            deviceID=device_data['deviceID'],
+            hostname=device_data['hostname'],
+            ipAddress=device_data['ipAddress'],
+            deviceType=device_data['deviceType'],
+            vendor=device_data['vendor'],
+            model=device_data['model'],
+            osVersion=device_data['osVersion'],
+            location=device_data['location'],
+            status=device_data['status']
+        )
+        db.session.add(device)
+        db.session.flush()  # Ensure the device is assigned an ID before adding interfaces and links
+
+        for interface_data in device_data['interfaces']:
+            interface = Interface(
+                interfaceID=interface_data['interfaceID'],
+                deviceID=device.deviceID,
+                interfaceName=interface_data['interfaceName'],
+                macAddress=interface_data['macAddress'],
+                ipAddress=interface_data['ipAddress'],
+                subnetMask=interface_data['subnetMask'],
+                status=interface_data['status']
+            )
+            db.session.add(interface)
+
+        for link_data in device_data['links']:
+            link = Link(
+                linkID=link_data['linkID'],
+                deviceID=device.deviceID,
+                sourceInterfaceID=link_data['sourceInterfaceID'],
+                destinationInterfaceID=link_data['destinationInterfaceID'],
+                linkType=link_data['linkType'],
+                bandwidth=link_data['bandwidth'],
+                status=link_data['status']
+            )
+            db.session.add(link)
+
+    db.session.commit()
