@@ -1,0 +1,35 @@
+
+
+from mongoengine import Document, StringField, EmbeddedDocument, EmbeddedDocumentField, ListField, IntField, connect
+
+class Interface(EmbeddedDocument):
+    interfaceID = StringField(required=True, unique=True)
+    interfaceName = StringField(required=True)
+    macAddress = StringField(required=True)
+    ipAddress = StringField(required=True)
+    subnetMask = StringField(required=True)
+    status = StringField(required=True)
+
+class Link(EmbeddedDocument):
+    linkID = StringField(required=True, unique=True)
+    sourceInterfaceID = StringField(required=True)
+    destinationInterfaceID = StringField(required=True)
+    linkType = StringField(required=True)
+    bandwidth = IntField(required=True)
+    status = StringField(required=True)
+
+class Test(Document):
+    deviceID = StringField(required=True, unique=True)
+    hostname = StringField(required=True)
+    ipAddress = StringField(required=True)
+    deviceType = StringField(required=True)
+    vendor = StringField(required=True)
+    model = StringField(required=True)
+    osVersion = StringField(required=True)
+    location = StringField(required=True)
+    status = StringField(required=True)
+    interfaces = ListField(EmbeddedDocumentField(Interface))
+    links = ListField(EmbeddedDocumentField(Link))
+
+# Connect to the MongoDB server
+connect('your_db_name', host='mongodb://qaentid:password@dandrlm58000.wellsfargo.com:29000,dandrwm58001.wellsfargo.com:29000,dandrbm58002.wellsfargo.com:29000/?replicaSet=rs_ddan1&authMechanism=PLAIN&authSource=$external')
