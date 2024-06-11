@@ -1,0 +1,95 @@
+
+from app import app
+from models import Test, Interface, Link
+import json
+
+# Load input data
+with open('input_file.json') as f:
+    input_data = json.load(f)
+
+# Function to check if an interface already exists
+def interface_exists(device, interface_id):
+    for interface in device.interfaces:
+        if interface.interfaceID == interface_id:
+            return True
+    return False
+
+# Function to check if a link already exists
+def link_exists(device, link_id):
+    for link in device.links:
+        if link.linkID == link_id:
+            return True
+    return False
+
+# Populate the database with the new data
+for device_data in input_data:
+    existing_device = Test.objects(deviceID=device_data['deviceID']).first()
+
+    if existing_device:
+        # Device exists, update its interfaces and links
+        for interface_data in device_data['interfaces']:
+            if not interface_exists(existing_device, interface_data['interfaceID']):
+                interface = Interface(
+                    interfaceID=interface_data['interfaceID'],
+                    interfaceName=interface_data['interfaceName'],
+                    macAddress=interface_data['macAddress'],
+                    ipAddress=interface_data['ipAddress'],
+                    subnetMask=interface_data['subnetMask'],
+                    status=interface_data['status']
+                )
+                existing_device.interfaces.append(interface)
+
+        for link_data in device_data['links']:
+            if not link_exists(existing_device, link_data['linkID']):
+                link = Link(
+                    linkID=link_data['linkID'],
+                    sourceInterfaceID=link_data['sourceInterfaceID'],
+                    destinationInterfaceID=link_data['destinationInterfaceID'],
+                    linkType=link_data['linkType'],
+                    bandwidth=link_data['bandwidth'],
+                    status=link_data['status']
+                )
+                existing_device.links.append(link)
+        
+        existing_device.save()
+    else:
+        # Device does not exist, create a new device
+        interfaces = [
+            Interface(
+                interfaceID=interface_data['interfaceID'],
+                interfaceName=interface_data['interfaceName'],
+                macAddress=interface_data['macAddress'],
+                ipAddress=interface_data['ipAddress'],
+                subnetMask=interface_data['subnetMask'],
+                status=interface_data['status']
+            )
+            for interface_data in device_data['interfaces']
+        ]
+
+        links = [
+            Link(
+                linkID=link_data['linkID'],
+                sourceInterfaceID=link_data['sourceInterfaceID'],
+                destinationInterfaceID=link_data['destinationInterfaceID'],
+                linkType=link_data['linkType'],
+                bandwidth=link_data['bandwidth'],
+                status=link_data['status']
+            )
+            for link_data in device_data['links']
+        ]
+
+        device = Test(
+            deviceID=device_data['deviceID'],
+            hostname=device_data['hostname'],
+            ipAddress=device_data['ipAddress'],
+            deviceType=device_data['deviceType'],
+            vendor=device_data['vendor'],
+            model=device_data['model'],
+            osVersion=device_data['osVersion'],
+            location=device_data['location'],
+            status=device_data['status'],
+            interfaces=interfaces,
+            links=links
+        )
+        device.save()
+
