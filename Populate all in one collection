@@ -1,0 +1,53 @@
+
+
+from app import app
+from models import Test, Interface, Link
+import json
+
+# Load input data
+with open('input_file.json') as f:
+    input_data = json.load(f)
+
+# Clear existing data
+Test.objects.delete()
+
+# Populate the database with the new data
+for device_data in input_data:
+    interfaces = [
+        Interface(
+            interfaceID=interface_data['interfaceID'],
+            interfaceName=interface_data['interfaceName'],
+            macAddress=interface_data['macAddress'],
+            ipAddress=interface_data['ipAddress'],
+            subnetMask=interface_data['subnetMask'],
+            status=interface_data['status']
+        )
+        for interface_data in device_data['interfaces']
+    ]
+
+    links = [
+        Link(
+            linkID=link_data['linkID'],
+            sourceInterfaceID=link_data['sourceInterfaceID'],
+            destinationInterfaceID=link_data['destinationInterfaceID'],
+            linkType=link_data['linkType'],
+            bandwidth=link_data['bandwidth'],
+            status=link_data['status']
+        )
+        for link_data in device_data['links']
+    ]
+
+    device = Test(
+        deviceID=device_data['deviceID'],
+        hostname=device_data['hostname'],
+        ipAddress=device_data['ipAddress'],
+        deviceType=device_data['deviceType'],
+        vendor=device_data['vendor'],
+        model=device_data['model'],
+        osVersion=device_data['osVersion'],
+        location=device_data['location'],
+        status=device_data['status'],
+        interfaces=interfaces,
+        links=links
+    )
+    device.save()
