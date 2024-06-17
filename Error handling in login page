@@ -1,0 +1,61 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login</h1>
+    <div class="container">
+        <form id="loginForm" action="{{ url_for('login2') }}" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <button type="submit">Login</button>
+        </form>
+        <div class="error" id="error-message" style="display: none;"></div>
+    </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('{{ url_for('login2') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.error);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.token) {
+                    console.log('Login successful, token:', data.token);
+                    // Handle successful login, e.g., redirect to another page or store the token
+                }
+            })
+            .catch(error => {
+                const errorMessageDiv = document.getElementById('error-message');
+                errorMessageDiv.innerText = error.message;
+                errorMessageDiv.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>
