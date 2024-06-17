@@ -1,0 +1,87 @@
+
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, make_response, abort
+import os
+from flask_sqlalchemy import SQLAlchemy
+import bcrypt
+from datetime import datetime, timedelta
+import jwt
+from functools import wraps
+
+app = Flask(__name__)
+
+base_dir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'this_is_the_secret_key'
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    username = db.Column(db.String(80), unique=True, nullable=False, primary_key=True)
+    password_hash = db.Column(db.LargeBinary, nullable=False)  # Store as byte string
+
+with app.app_context():
+    db.create_all()
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'Authorization' in request.headers:
+            # print(1)
+            token = request.headers['Authorization'].split()[1]
+        
+        if not token:
+            return redirect(url_for('login2'))
+        
+        try:
+            data = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for('login2'))
+        except jwt.InvalidTokenError:
+            return redirect(url_for('login2'))
+        return f(*args, **kwargs)
+    return decorated
+
+@app.route('/')
+# @token_required
+def home_route():
+    return render_template('index.html')
+
+
+@app.route('/validate')
+@token_required
+def validate_route():
+    return {"success":"true"}
+
+
+
+
+
+
+@app.route('/protected')
+@token_required
+def protected_page():
+    return {"helloworld"}
+
+@app.route('/login2', methods=['GET', 'POST'])
+def login2():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password'].encode('utf-8')
+
+        user = User.query.filter_by(username=username).first()
+        if user and bcrypt.checkpw(password, user.password_hash):
+            token = jwt.encode({
+                'username': user.username,
+                'exp': datetime.utcnow() + timedelta(minutes=5)
+            }, app.config['SECRET_KEY'], algorithm='HS256')
+            return jsonify({'token': token})
+        else:
+            flash('Invalid credentials')
+            return redirect(url_for('login2'))
+
+    return render_template('login2.html')
+
+if __name__ == '__main__':
+    app.run(debug=True,port=8001)
