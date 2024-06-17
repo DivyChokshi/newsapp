@@ -1,0 +1,45 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Hello World!</h1>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            
+            if (!token) {
+                window.location.href = '/login2'; // Redirect to login if no token is found
+            }
+            
+            fetch('/validate', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // Token might be expired or invalid, handle accordingly
+                    localStorage.removeItem('token');
+                    window.location.href = '/login2';
+                }
+                return response.json();
+            })
+            .then(data => console.log(data))
+            .catch(error => {
+                console.error('Error:', error);
+                localStorage.removeItem('token');
+                window.location.href = '/login2';
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+// index.html with expiry date validation
