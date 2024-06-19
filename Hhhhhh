@@ -1,0 +1,6 @@
+
+
+import bcrypt from app import User, db, app with app.app_context(): db.create_all() def adduser(name, password): with app.app_context(): salt = bcrypt.gensalt() password_hashed = bcrypt.hashpw(password.encode('utf-8'), salt) new_user = User(username=name, password_hash=password_hashed) db.session.add(new_user) db.session.commit() print("User added successfully") adduser("gaurava", "1234")
+
+
+from app import User, db, app with app.app_context(): db.create_all() def adduser(name, password): with app.app_context(): salt = bcrypt.gensalt() password_hashed = bcrypt.hashpw(password.encode('utf-8'), salt) new_user = User(username=name, password_hash=password_hashed) db.session.add(new_user) db.session.commit() print("User added successfully") adduser("gaurava", "1234")
