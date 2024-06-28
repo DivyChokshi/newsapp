@@ -1,0 +1,50 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content label {
+            display: block;
+            padding: 8px 16px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content input[type="checkbox"] {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dropdown">
+    <button>Select Options</button>
+    <div class="dropdown-content">
+        <label><input type="checkbox" value="option1"> Option 1</label>
+        <label><input type="checkbox" value="option2"> Option 2</label>
+        <label><input type="checkbox" value="option3"> Option 3</label>
+    </div>
+</div>
+
+</body>
+</html>
