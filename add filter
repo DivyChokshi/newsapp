@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content label {
+            display: block;
+            padding: 8px 16px;
+        }
+
+        .dropdown-content input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .apply-filters {
+            display: block;
+            margin: 10px 0;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dropdown">
+    <button id="dropdownButton">Select Options</button>
+    <div class="dropdown-content">
+        <label><input type="checkbox" value="option1"> Option 1</label>
+        <label><input type="checkbox" value="option2"> Option 2</label>
+        <label><input type="checkbox" value="option3"> Option 3</label>
+        <button class="apply-filters" onclick="applyFilters()">Apply Filters</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('dropdownButton').addEventListener('click', function() {
+        const dropdownContent = document.querySelector('.dropdown-content');
+        if (dropdownContent.style.display === 'block') {
+            dropdownContent.style.display = 'none';
+        } else {
+            dropdownContent.style.display = 'block';
+        }
+    });
+
+    function applyFilters() {
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const checkboxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]');
+        const selectedOptions = [];
+
+        checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+                selectedOptions.push(checkbox.value);
+            }
+        });
+
+        if (selectedOptions.length === 0) {
+            alert("No filters selected. Please select at least one filter.");
+            return;
+        }
+
+        console.log('Selected Options:', selectedOptions);
+        
+        fetch(`/get/data?src=route1&dest=route2&selected_devices=${selectedOptions.join(',')}&paths_type=hello`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Handle the response data as needed
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+        // Deselect all checkboxes
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+
+        // Hide the dropdown content
+        dropdownContent.style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
