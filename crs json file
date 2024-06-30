@@ -1,0 +1,214 @@
+[
+    {
+        "CR_ID": "CHG0001235",
+        "created_date": "2024-06-28T11:00:00Z",
+        "implementation_date": "2024-06-29T13:00:00Z",
+        "implemented_by": "Jane Smith",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Router-02",
+                "change_type": "Firmware Upgrade",
+                "details": "Upgraded firmware to the latest version for security patches."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001236",
+        "created_date": "2024-06-28T12:00:00Z",
+        "implementation_date": "2024-06-29T14:00:00Z",
+        "implemented_by": "Alice Johnson",
+        "assigned_group": "Network Security",
+        "configuration_item_list": [
+            {
+                "device": "Firewall-01",
+                "change_type": "Security Policy Update",
+                "details": "Updated security policies to include new threat signatures."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001237",
+        "created_date": "2024-06-28T13:00:00Z",
+        "implementation_date": "2024-06-29T15:00:00Z",
+        "implemented_by": "Bob Lee",
+        "assigned_group": "Server Administration",
+        "configuration_item_list": [
+            {
+                "device": "Server-01",
+                "change_type": "Patch Installation",
+                "details": "Installed latest patches for OS security vulnerabilities."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001238",
+        "created_date": "2024-06-28T14:00:00Z",
+        "implementation_date": "2024-06-29T16:00:00Z",
+        "implemented_by": "Charlie Kim",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Switch-01",
+                "change_type": "VLAN Configuration",
+                "details": "Configured new VLANs for segmenting network traffic."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001239",
+        "created_date": "2024-06-28T15:00:00Z",
+        "implementation_date": "2024-06-29T17:00:00Z",
+        "implemented_by": "David Brown",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Router-03",
+                "change_type": "QoS Policy Update",
+                "details": "Updated QoS policies to prioritize critical traffic."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001240",
+        "created_date": "2024-06-28T16:00:00Z",
+        "implementation_date": "2024-06-29T18:00:00Z",
+        "implemented_by": "Eva Green",
+        "assigned_group": "Network Security",
+        "configuration_item_list": [
+            {
+                "device": "Firewall-02",
+                "change_type": "Access Control List Update",
+                "details": "Updated ACLs to restrict unauthorized access."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001241",
+        "created_date": "2024-06-28T17:00:00Z",
+        "implementation_date": "2024-06-29T19:00:00Z",
+        "implemented_by": "Frank White",
+        "assigned_group": "Server Administration",
+        "configuration_item_list": [
+            {
+                "device": "Server-02",
+                "change_type": "Disk Expansion",
+                "details": "Expanded disk space to accommodate growing data needs."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001242",
+        "created_date": "2024-06-28T18:00:00Z",
+        "implementation_date": "2024-06-29T20:00:00Z",
+        "implemented_by": "Grace Blue",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Router-04",
+                "change_type": "Routing Protocol Update",
+                "details": "Updated routing protocol configurations for better efficiency."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001243",
+        "created_date": "2024-06-28T19:00:00Z",
+        "implementation_date": "2024-06-29T21:00:00Z",
+        "implemented_by": "Henry Black",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Switch-02",
+                "change_type": "Port Configuration",
+                "details": "Configured ports to support new network devices."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001244",
+        "created_date": "2024-06-28T20:00:00Z",
+        "implementation_date": "2024-06-29T22:00:00Z",
+        "implemented_by": "Ivy Grey",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Router-05",
+                "change_type": "IP Address Change",
+                "details": "Changed IP addresses to resolve network conflicts."
+            }
+        ]
+    }
+]
+[
+    {
+        "CR_ID": "CHG0001245",
+        "created_date": "2024-06-28T21:00:00Z",
+        "implementation_date": "2024-06-29T23:00:00Z",
+        "implemented_by": "Jack Red",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Router-06",
+                "change_type": "OSPF Configuration",
+                "details": "Adjusted OSPF settings to optimize routing paths."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001246",
+        "created_date": "2024-06-28T22:00:00Z",
+        "implementation_date": "2024-06-30T00:00:00Z",
+        "implemented_by": "Kathy Yellow",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Router-07",
+                "change_type": "Static Route Addition",
+                "details": "Added new static routes for improved network traffic control."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001247",
+        "created_date": "2024-06-28T23:00:00Z",
+        "implementation_date": "2024-06-30T01:00:00Z",
+        "implemented_by": "Liam Orange",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Switch-03",
+                "change_type": "Port Speed Adjustment",
+                "details": "Adjusted port speeds to support higher bandwidth requirements."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001248",
+        "created_date": "2024-06-29T00:00:00Z",
+        "implementation_date": "2024-06-30T02:00:00Z",
+        "implemented_by": "Mia Purple",
+        "assigned_group": "Network Security",
+        "configuration_item_list": [
+            {
+                "device": "Firewall-03",
+                "change_type": "NAT Rule Update",
+                "details": "Updated NAT rules to enhance network address translation."
+            }
+        ]
+    },
+    {
+        "CR_ID": "CHG0001249",
+        "created_date": "2024-06-29T01:00:00Z",
+        "implementation_date": "2024-06-30T03:00:00Z",
+        "implemented_by": "Noah Pink",
+        "assigned_group": "Network Operations",
+        "configuration_item_list": [
+            {
+                "device": "Router-08",
+                "change_type": "DHCP Configuration",
+                "details": "Updated DHCP settings for efficient IP address management."
+            }
+        ]
+    }
+]
